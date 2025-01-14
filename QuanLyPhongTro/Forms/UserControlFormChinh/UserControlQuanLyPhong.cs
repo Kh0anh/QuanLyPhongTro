@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace QuanLyPhongTro.Forms.UserControlFormChinh
@@ -12,7 +15,78 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
 
         private void UserControlQuanLyPhong_Load(object sender, EventArgs e)
         {
+            //Kiểm tra xem Form có đang trong chế độ thiết kế không nếu có thì không load tránh lỗi
+            if (this.DesignMode)
+            {
+                return;
+            }
 
+            CapNhatDanhSachPhong();
+        }
+
+        //Cập nhật danh sách phòng từ cơ sở dữ liệu lên listView
+        public void CapNhatDanhSachPhong()
+        {
+            //Xoá danh sách phòng cũ trước khi cập nhật
+            lvQuanLyPhong.Items.Clear();
+
+            //Tải danh sách phòng từ cơ sở dữ liệu
+            using (SQLiteCommand truyVan = new SQLiteCommand("SELECT MaPhong, TenPhong, GiaPhong, PhuPhi, TrangThai, NguoiThue, NgayThue, SoDienCu, SoNuocCu, GhiChu FROM Phong WHERE Xoa==0", CaiDat.CSDL))
+            using (SQLiteDataReader doc = truyVan.ExecuteReader())
+            {
+                while (doc.Read())
+                {
+                    //Thêm dữ liệu vào lvPhongTro
+                    ListViewItem item = new ListViewItem(((Int64)doc["MaPhong"]).ToString());
+                    item.SubItems.Add((string)doc["TenPhong"]);
+                    item.SubItems.Add(((Int64)doc["GiaPhong"]).ToString());
+
+                    if ((Int64)doc["PhuPhi"] > 0)
+                    {
+                        item.SubItems.Add(layDanhSachPhuPhi((Int64)doc["MaPhong"]));
+                    }
+                    else
+                    {
+                        item.SubItems.Add("");
+                    }
+
+                    if ((Int64)doc["TrangThai"] == 0)
+                    {
+                        item.SubItems.Add("Phòng trống");
+                        item.SubItems.Add("");
+                        item.SubItems.Add("");
+                    }
+                    else
+                    {
+                        item.SubItems.Add("Được thuê");
+                        item.SubItems.Add((string)doc["NguoiThue"]);
+                        item.SubItems.Add((string)doc["NgayThue"]);
+                    }
+
+                    item.SubItems.Add(((Int64)doc["SoDienCu"]).ToString());
+                    item.SubItems.Add(((Int64)doc["SoNuocCu"]).ToString());
+                    item.SubItems.Add((string)doc["GhiChu"]);
+                    this.lvQuanLyPhong.Items.Add(item);
+                }
+            }
+        }
+
+        private string layDanhSachPhuPhi(Int64 maPhong)
+        {
+            string strPhuPhi = "";
+            using (SQLiteCommand truyVan = new SQLiteCommand("SELECT p.TenPhuPhi FROM PhongVaPhuPhi p INNER JOIN PhuPhi f ON p.MaPhuPhi=f.MaPhuPhi WHERE u.MaPhong==@maPhong", CaiDat.CSDL))
+            {
+                truyVan.Parameters.AddWithValue("@maPhong", maPhong);
+                using (SQLiteDataReader doc = truyVan.ExecuteReader())
+                {
+                    while (doc.Read())
+                    {
+                        strPhuPhi += string.Format("{0}, ", doc.GetString(0));
+                    }
+                }
+            }
+
+            return strPhuPhi.Substring(0, strPhuPhi.Length - 2);
         }
 
         private void toolThemPhong_Click(object sender, EventArgs e)
@@ -32,12 +106,51 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
 
         private void toolXoa_Click(object sender, EventArgs e)
         {
+            //Lấy danh sách phòng cần xoá mà người dùng đang chọn
+            ListViewItem[] danhSachPhong = layDanhSachPhong();
 
+            //Nếu người dùng đang không chọn phòng nào thì return
+            if (danhSachPhong.Length < 1)
+            {
+                return;
+            }
+
+            //Tạo luồng mới để tránh form chính bị đơ khi thực hiện tác vụ
+            Task.Run(() =>
+            {
+                foreach (ListViewItem phong in danhSachPhong)
+                {
+                    //Xoá dữ liệu khỏi listview phòng
+                    //Phải sử dụng Invoke vì đang ở luồng khác
+                    Invoke((MethodInvoker)(() =>
+                    {
+                        lvQuanLyPhong.Items.Remove(phong);
+                    }));
+                }
+                foreach (ListViewItem phong in danhSachPhong)
+                {
+                    //Xoá phòng khỏi cơ sở dữ liệu bằng cách chuyển cột Xoa sang 1
+                    using (SQLiteCommand truyVan = new SQLiteCommand("UPDATE Phong SET Xoa = 1 WHERE MaPhong = @maPhong", CaiDat.CSDL))
+                    {
+                        truyVan.Parameters.AddWithValue("@maPhong", phong.Text);
+                        truyVan.ExecuteNonQuery();
+                    }
+                }
+            });
         }
 
         private void toolChinhTrangThai_Click(object sender, EventArgs e)
         {
             new FormChinhSuaTrangThai().Show();
+        }
+        private ListViewItem[] layDanhSachPhong()
+        {
+            List<ListViewItem> danhSachphong = new List<ListViewItem>();
+            foreach (ListViewItem phong in lvQuanLyPhong.SelectedItems)
+            {
+                danhSachphong.Add(phong);
+            }
+            return danhSachphong.ToArray();
         }
     }
 }
