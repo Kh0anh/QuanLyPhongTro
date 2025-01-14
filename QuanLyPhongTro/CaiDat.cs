@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS ""Phong"" (
 	""PhuPhi""	INTEGER NOT NULL,
 	""TrangThai""	INTEGER NOT NULL,
 	""NguoiThue""	TEXT NOT NULL,
-	""NgayThue""	INTEGER NOT NULL,
+	""NgayThue""	TEXT NOT NULL,
 	""SoDienCu""	INTEGER NOT NULL,
 	""SoNuocCu""	INTEGER NOT NULL,
 	""GhiChu""	TEXT NOT NULL,

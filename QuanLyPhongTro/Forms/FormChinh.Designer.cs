@@ -53,7 +53,7 @@
             this.tabControlChinh.Multiline = true;
             this.tabControlChinh.Name = "tabControlChinh";
             this.tabControlChinh.SelectedIndex = 0;
-            this.tabControlChinh.Size = new System.Drawing.Size(794, 383);
+            this.tabControlChinh.Size = new System.Drawing.Size(894, 383);
             this.tabControlChinh.TabIndex = 1;
             // 
             // tabQuanLyPhong
@@ -63,7 +63,7 @@
             this.tabQuanLyPhong.Location = new System.Drawing.Point(4, 23);
             this.tabQuanLyPhong.Name = "tabQuanLyPhong";
             this.tabQuanLyPhong.Padding = new System.Windows.Forms.Padding(3);
-            this.tabQuanLyPhong.Size = new System.Drawing.Size(786, 356);
+            this.tabQuanLyPhong.Size = new System.Drawing.Size(886, 356);
             this.tabQuanLyPhong.TabIndex = 0;
             this.tabQuanLyPhong.Text = "Quản Lý Phòng";
             this.tabQuanLyPhong.UseVisualStyleBackColor = true;
@@ -73,7 +73,7 @@
             this.userControlQuanLyPhong.Dock = System.Windows.Forms.DockStyle.Fill;
             this.userControlQuanLyPhong.Location = new System.Drawing.Point(3, 3);
             this.userControlQuanLyPhong.Name = "userControlQuanLyPhong";
-            this.userControlQuanLyPhong.Size = new System.Drawing.Size(780, 350);
+            this.userControlQuanLyPhong.Size = new System.Drawing.Size(880, 350);
             this.userControlQuanLyPhong.TabIndex = 0;
             // 
             // tabCaiDat
@@ -83,7 +83,7 @@
             this.tabCaiDat.Location = new System.Drawing.Point(4, 23);
             this.tabCaiDat.Name = "tabCaiDat";
             this.tabCaiDat.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCaiDat.Size = new System.Drawing.Size(786, 356);
+            this.tabCaiDat.Size = new System.Drawing.Size(886, 356);
             this.tabCaiDat.TabIndex = 1;
             this.tabCaiDat.Text = "Cài Đặt";
             this.tabCaiDat.UseVisualStyleBackColor = true;
@@ -93,7 +93,7 @@
             this.userControlCaiDat1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.userControlCaiDat1.Location = new System.Drawing.Point(3, 3);
             this.userControlCaiDat1.Name = "userControlCaiDat1";
-            this.userControlCaiDat1.Size = new System.Drawing.Size(780, 350);
+            this.userControlCaiDat1.Size = new System.Drawing.Size(880, 350);
             this.userControlCaiDat1.TabIndex = 0;
             // 
             // imgDanhSachBieuTuong
@@ -107,7 +107,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(900, 450);
             this.Controls.Add(this.tabControlChinh);
             this.DrawerAutoHide = false;
             this.DrawerShowIconsWhenHidden = true;
