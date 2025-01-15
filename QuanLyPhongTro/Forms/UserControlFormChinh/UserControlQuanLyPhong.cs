@@ -96,7 +96,12 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
 
         private void toolSuaPhong_Click(object sender, EventArgs e)
         {
+            FormChinhSuaPhong FmChinhSua = new FormChinhSuaPhong();
+            //FmChinhSua.TaiDuLieu();
+
+
             new FormChinhSuaPhong().Show();
+
         }
 
         private void toolTinhTien_Click(object sender, EventArgs e)

@@ -1,4 +1,7 @@
-﻿using MaterialSkin.Controls;
+﻿using System;
+using System.Data.SQLite;
+using System.Windows.Forms;
+using MaterialSkin.Controls;
 
 namespace QuanLyPhongTro.Forms
 {
@@ -8,5 +11,12 @@ namespace QuanLyPhongTro.Forms
         {
             InitializeComponent();
         }
+
+        public void TaiDuLieu(Int64 maPhong)
+        {
+            
+        }
+
+       
     }
 }
