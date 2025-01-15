@@ -17,14 +17,17 @@ namespace QuanLyPhongTro.Forms
         {
             try
             {
+                //Kiểm tra xem có đang chọn phụ phí nào trong ComboBox không?
                 if (cbPhuPhi.SelectedItem == null )
                 {
                     MaterialMessageBox.Show("Vui lòng chọn phụ phí cần thêm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
+                
                 string phuPhi = cbPhuPhi.SelectedItem.ToString();
 
+                //Truy vấn để thêm phụ phí
                 string query = "INSERT INTO Phong VALUES(@PhuPhi)";
                 using (SQLiteCommand cmd = new SQLiteCommand(query, CaiDat.CSDL))
                 {
@@ -32,9 +35,9 @@ namespace QuanLyPhongTro.Forms
                     cmd.ExecuteNonQuery();
                 }
             }
-            catch (Exception ex)
+            catch (Exception err)
             {
-                MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MaterialMessageBox.Show(err.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -42,14 +45,17 @@ namespace QuanLyPhongTro.Forms
         {
             try
             {
-                if (cbPhuPhi.SelectedItem == null)
+                //Kiểm tra xem có đang chọn phụ phí nào trong Listview không?
+                if (lstPhuPhi.SelectedItems == null)
                 {
                     MaterialMessageBox.Show("Vui lòng chọn phụ phí cần xóa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                string phuPhi = cbPhuPhi.SelectedItem.ToString();
+                //Lấy phụ phí được chọn chuyển sang chuỗi để thêm vào csdl
+                string phuPhi = lstPhuPhi.SelectedItems.ToString();
 
+                //Truy vấn xóa phụ phí được chọn
                 string query = "DELETE FROM Phong WHERE PhuPhi == @phuPhi";
                 using (SQLiteCommand cmd = new SQLiteCommand(query, CaiDat.CSDL))
                 {
@@ -57,29 +63,36 @@ namespace QuanLyPhongTro.Forms
                     cmd.ExecuteNonQuery();
                 }
             }
-            catch ( Exception ex)
+            catch (Exception err)
             {
-                MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MaterialMessageBox.Show(err.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnHuy_Click(object sender, System.EventArgs e)
         {
-            Close();
+            Close(); //Đóng form
         }
 
         private void btnThemPhong_Click(object sender, System.EventArgs e)
         {
+            //Kiểm tra xem 
+            if (string.IsNullOrEmpty(txtTenPhong.Text) || string.IsNullOrEmpty(txtGiaPhong.Text))
+            {
+                MessageBox.Show("Vui lòng điền đầy đủ thông tin!");
+                return;
+            }
+
             try 
             {
-                string query = "INSERT INTO Phong (TenPhong, GiaPhong, SoDienCu, SoNuocCu, GhiChu)" + "VALUES (@ten, @gia, @dien, @nuoc, @ghichu)";
-                using (SQLiteCommand cmd = new SQLiteCommand(query, CaiDat.CSDL))
+                string truyVan = "INSERT INTO Phong (TenPhong, GiaPhong, SoDienCu, SoNuocCu, GhiChu)" + "VALUES (@ten, @gia, @dien, @nuoc, @ghichu)";
+                using (SQLiteCommand cmd = new SQLiteCommand(truyVan, CaiDat.CSDL))
                 {
-                    cmd.Parameters.AddWithValue("@ten", txtTenPhong);
-                    cmd.Parameters.AddWithValue("@gia", txtGiaPhong);
-                    cmd.Parameters.AddWithValue("@dien", txtSoDienCu);
-                    cmd.Parameters.AddWithValue("@nuoc", txtSoNuocCu);
-                    cmd.Parameters.AddWithValue("@ghichu", txtGhiChu);
+                    cmd.Parameters.AddWithValue("@ten", txtTenPhong.Text);
+                    cmd.Parameters.AddWithValue("@gia", Int32.Parse(txtGiaPhong.Text));
+                    cmd.Parameters.AddWithValue("@dien", Int32.Parse(txtSoDienCu.Text));
+                    cmd.Parameters.AddWithValue("@nuoc", Int32.Parse(txtSoNuocCu.Text));
+                    cmd.Parameters.AddWithValue("@ghichu", txtGhiChu.Text);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -92,19 +105,22 @@ namespace QuanLyPhongTro.Forms
 
         private void HienThiDanhSachPhuPhi()
         {
+            //Xóa danh sách listview cũ trước khi hiển thị cái mới
             lstPhuPhi.Items.Clear();
             try
             {
-                string query = "SELECT MaPhuPhi, TenPhuPhi, GiaPhuPhi FROM PhuPhi WHERE Xoa == 0";
-                using (SQLiteCommand cmd = new SQLiteCommand(query, CaiDat.CSDL))
+                //Truy vấn lấy các thuộc tính từ bảng Phụ Phí
+                string truyVan = "SELECT MaPhuPhi, TenPhuPhi, GiaPhuPhi FROM PhuPhi WHERE Xoa == 0";
+                using (SQLiteCommand cmd = new SQLiteCommand(truyVan, CaiDat.CSDL))
                 {
-                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    using (SQLiteDataReader doc = cmd.ExecuteReader())
                     {
-                        while (reader.Read())
-                        {
-                            ListViewItem item = new ListViewItem(reader["MaPhuPhi"].ToString());
-                            item.SubItems.Add((string)reader["TenPhuPhi"]);
-                            item.SubItems.Add(((Int64)reader["GiaPhuPhi"]).ToString());
+                        while (doc.Read())
+                        {   
+                            //Thêm các item vào trong litsview
+                            ListViewItem item = new ListViewItem(doc["MaPhuPhi"].ToString());
+                            item.SubItems.Add((string)doc["TenPhuPhi"]);
+                            item.SubItems.Add(((Int64)doc["GiaPhuPhi"]).ToString());
                             lstPhuPhi.Items.Add(item);
                         }
                     }
@@ -118,29 +134,32 @@ namespace QuanLyPhongTro.Forms
 
         private void LayDanhSachPhuPhi()
         {
-            cbPhuPhi.Items.Clear();
             try
-            {
-                string query = "SELECT TenPhuPhi FROM PhuPhi"; // Truy vấn lấy danh sách tên phụ phí từ bảng PhuPhi
-                using (SQLiteCommand cmd = new SQLiteCommand(query, CaiDat.CSDL)) // CSDL là đối tượng kết nối với SQLite
+            {  
+                // Truy vấn lấy danh sách tên phụ phí từ bảng PhuPhi
+                string truyVan = "SELECT TenPhuPhi FROM PhuPhi"; 
+                using (SQLiteCommand cmd = new SQLiteCommand(truyVan, CaiDat.CSDL))
                 {
-                    using (SQLiteDataReader reader = cmd.ExecuteReader()) // Đọc dữ liệu trả về
+                    // Đọc dữ liệu trả về
+                    using (SQLiteDataReader doc = cmd.ExecuteReader()) 
                     {
-                        // Xóa tất cả các mục hiện tại trong ComboBox (nếu có)
+                        // Xóa danh sách phụ phí cũ trước khi thêm mới vào ComboBox
                         cbPhuPhi.Items.Clear();
 
                         // Duyệt qua các dòng dữ liệu và thêm vào ComboBox
-                        while (reader.Read())
+                        while (doc.Read())
                         {
-                            string tenPhuPhi = reader["TenPhuPhi"].ToString(); // Lấy tên phụ phí từ mỗi dòng
-                            cbPhuPhi.Items.Add(tenPhuPhi); // Thêm vào ComboBox
+                            // Lấy tên phụ phí từ mỗi dòng
+                            string tenPhuPhi = doc["TenPhuPhi"].ToString();
+                            // Thêm vào ComboBox
+                            cbPhuPhi.Items.Add(tenPhuPhi); 
                         }
                     }
                 }
             }
             catch (Exception err)
             {
-                MessageBox.Show($"Lỗi: {err.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); // Xử lý lỗi
+                MaterialMessageBox.Show(err.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
