@@ -49,10 +49,10 @@
             this.tbSoNuocMoi = new MaterialSkin.Controls.MaterialTextBox();
             this.tbSoDienMoi = new MaterialSkin.Controls.MaterialTextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.tbTongTienDien = new MaterialSkin.Controls.MaterialTextBox();
-            this.tbTongTienNuoc = new MaterialSkin.Controls.MaterialTextBox();
-            this.tbTongTienPhuPhi = new MaterialSkin.Controls.MaterialTextBox();
             this.tbTongTien = new MaterialSkin.Controls.MaterialTextBox();
+            this.tbTongTienPhuPhi = new MaterialSkin.Controls.MaterialTextBox();
+            this.tbTongTienNuoc = new MaterialSkin.Controls.MaterialTextBox();
+            this.tbTongTienDien = new MaterialSkin.Controls.MaterialTextBox();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -156,6 +156,7 @@
             this.btXoaPhuPhi.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btXoaPhuPhi.UseAccentColor = true;
             this.btXoaPhuPhi.UseVisualStyleBackColor = true;
+            this.btXoaPhuPhi.Click += new System.EventHandler(this.btXoaPhuPhi_Click);
             // 
             // cmPhuPhi
             // 
@@ -276,6 +277,7 @@
             this.btThemPhuPhi.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btThemPhuPhi.UseAccentColor = false;
             this.btThemPhuPhi.UseVisualStyleBackColor = true;
+            this.btThemPhuPhi.Click += new System.EventHandler(this.btThemPhuPhi_Click);
             // 
             // groupBox1
             // 
@@ -432,48 +434,29 @@
             this.groupBox3.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox3.Size = new System.Drawing.Size(921, 145);
+            this.groupBox3.Size = new System.Drawing.Size(921, 155);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Tổng Tiền";
             // 
-            // tbTongTienDien
+            // tbTongTien
             // 
-            this.tbTongTienDien.AnimateReadOnly = false;
-            this.tbTongTienDien.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tbTongTienDien.Depth = 0;
-            this.tbTongTienDien.Enabled = false;
-            this.tbTongTienDien.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.tbTongTienDien.Hint = "Tổng Tiền Điện";
-            this.tbTongTienDien.LeadingIcon = null;
-            this.tbTongTienDien.Location = new System.Drawing.Point(8, 23);
-            this.tbTongTienDien.MaxLength = 50;
-            this.tbTongTienDien.MouseState = MaterialSkin.MouseState.OUT;
-            this.tbTongTienDien.Multiline = false;
-            this.tbTongTienDien.Name = "tbTongTienDien";
-            this.tbTongTienDien.Size = new System.Drawing.Size(413, 50);
-            this.tbTongTienDien.TabIndex = 14;
-            this.tbTongTienDien.Text = "";
-            this.tbTongTienDien.TrailingIcon = null;
-            // 
-            // tbTongTienNuoc
-            // 
-            this.tbTongTienNuoc.AnimateReadOnly = false;
-            this.tbTongTienNuoc.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tbTongTienNuoc.Depth = 0;
-            this.tbTongTienNuoc.Enabled = false;
-            this.tbTongTienNuoc.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.tbTongTienNuoc.Hint = "Tổng Tiền Nước";
-            this.tbTongTienNuoc.LeadingIcon = null;
-            this.tbTongTienNuoc.Location = new System.Drawing.Point(8, 87);
-            this.tbTongTienNuoc.MaxLength = 50;
-            this.tbTongTienNuoc.MouseState = MaterialSkin.MouseState.OUT;
-            this.tbTongTienNuoc.Multiline = false;
-            this.tbTongTienNuoc.Name = "tbTongTienNuoc";
-            this.tbTongTienNuoc.Size = new System.Drawing.Size(413, 50);
-            this.tbTongTienNuoc.TabIndex = 14;
-            this.tbTongTienNuoc.Text = "";
-            this.tbTongTienNuoc.TrailingIcon = null;
+            this.tbTongTien.AnimateReadOnly = false;
+            this.tbTongTien.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tbTongTien.Depth = 0;
+            this.tbTongTien.Enabled = false;
+            this.tbTongTien.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.tbTongTien.Hint = "Tổng Tiền";
+            this.tbTongTien.LeadingIcon = null;
+            this.tbTongTien.Location = new System.Drawing.Point(500, 87);
+            this.tbTongTien.MaxLength = 50;
+            this.tbTongTien.MouseState = MaterialSkin.MouseState.OUT;
+            this.tbTongTien.Multiline = false;
+            this.tbTongTien.Name = "tbTongTien";
+            this.tbTongTien.Size = new System.Drawing.Size(414, 50);
+            this.tbTongTien.TabIndex = 20;
+            this.tbTongTien.Text = "";
+            this.tbTongTien.TrailingIcon = null;
             // 
             // tbTongTienPhuPhi
             // 
@@ -494,24 +477,43 @@
             this.tbTongTienPhuPhi.Text = "";
             this.tbTongTienPhuPhi.TrailingIcon = null;
             // 
-            // tbTongTien
+            // tbTongTienNuoc
             // 
-            this.tbTongTien.AnimateReadOnly = false;
-            this.tbTongTien.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tbTongTien.Depth = 0;
-            this.tbTongTien.Enabled = false;
-            this.tbTongTien.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.tbTongTien.Hint = "Tổng Tiền";
-            this.tbTongTien.LeadingIcon = null;
-            this.tbTongTien.Location = new System.Drawing.Point(500, 87);
-            this.tbTongTien.MaxLength = 50;
-            this.tbTongTien.MouseState = MaterialSkin.MouseState.OUT;
-            this.tbTongTien.Multiline = false;
-            this.tbTongTien.Name = "tbTongTien";
-            this.tbTongTien.Size = new System.Drawing.Size(406, 50);
-            this.tbTongTien.TabIndex = 20;
-            this.tbTongTien.Text = "";
-            this.tbTongTien.TrailingIcon = null;
+            this.tbTongTienNuoc.AnimateReadOnly = false;
+            this.tbTongTienNuoc.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tbTongTienNuoc.Depth = 0;
+            this.tbTongTienNuoc.Enabled = false;
+            this.tbTongTienNuoc.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.tbTongTienNuoc.Hint = "Tổng Tiền Nước";
+            this.tbTongTienNuoc.LeadingIcon = null;
+            this.tbTongTienNuoc.Location = new System.Drawing.Point(8, 87);
+            this.tbTongTienNuoc.MaxLength = 50;
+            this.tbTongTienNuoc.MouseState = MaterialSkin.MouseState.OUT;
+            this.tbTongTienNuoc.Multiline = false;
+            this.tbTongTienNuoc.Name = "tbTongTienNuoc";
+            this.tbTongTienNuoc.Size = new System.Drawing.Size(413, 50);
+            this.tbTongTienNuoc.TabIndex = 14;
+            this.tbTongTienNuoc.Text = "";
+            this.tbTongTienNuoc.TrailingIcon = null;
+            // 
+            // tbTongTienDien
+            // 
+            this.tbTongTienDien.AnimateReadOnly = false;
+            this.tbTongTienDien.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tbTongTienDien.Depth = 0;
+            this.tbTongTienDien.Enabled = false;
+            this.tbTongTienDien.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.tbTongTienDien.Hint = "Tổng Tiền Điện";
+            this.tbTongTienDien.LeadingIcon = null;
+            this.tbTongTienDien.Location = new System.Drawing.Point(8, 23);
+            this.tbTongTienDien.MaxLength = 50;
+            this.tbTongTienDien.MouseState = MaterialSkin.MouseState.OUT;
+            this.tbTongTienDien.Multiline = false;
+            this.tbTongTienDien.Name = "tbTongTienDien";
+            this.tbTongTienDien.Size = new System.Drawing.Size(413, 50);
+            this.tbTongTienDien.TabIndex = 14;
+            this.tbTongTienDien.Text = "";
+            this.tbTongTienDien.TrailingIcon = null;
             // 
             // FormTinhTien
             // 
