@@ -3,14 +3,17 @@ using System.Data.SQLite;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MaterialSkin.Controls;
+using QuanLyPhongTro.Forms.UserControlFormChinh;
 
 namespace QuanLyPhongTro.Forms
 {
     public partial class FormThemPhong : MaterialForm
     {
-        public FormThemPhong()
+        private readonly UserControlQuanLyPhong _userControlQuanLyPhong;
+        public FormThemPhong(UserControlQuanLyPhong userControl)
         {
             InitializeComponent();
+            _userControlQuanLyPhong = userControl;
         }
 
         private void FormThemPhong_Load(object sender, EventArgs e)
@@ -38,7 +41,8 @@ namespace QuanLyPhongTro.Forms
             try
             {
                 transaction = CaiDat.CSDL.BeginTransaction();
-
+                //Biến để lưu mã phòng vừa thêm
+                long idPhong = -1;
                 string truyVan = @"INSERT INTO Phong (TenPhong, GiaPhong, PhuPhi, TrangThai, NguoiThue, NgayThue, SoDienCu, SoNuocCu, GhiChu, Xoa)
                                     VALUES (@ten, @gia, @phuPhi, @trangThai, 0, @ngayThue, @dien, @nuoc, @ghichu, 0);
                                     SELECT last_insert_rowid();";
@@ -47,7 +51,7 @@ namespace QuanLyPhongTro.Forms
                     lenh.Parameters.AddWithValue("@ten", txtTenPhong.Text);
                     lenh.Parameters.AddWithValue("@gia", Int32.Parse(txtGiaPhong.Text));
                     lenh.Parameters.AddWithValue("@phuPhi", 0);
-                    lenh.Parameters.AddWithValue("@trangThai", 1);
+                    lenh.Parameters.AddWithValue("@trangThai", 0);
                     lenh.Parameters.AddWithValue("@ngayThue", DateTime.Now.ToString("dd-MM-yyyy"));
                     lenh.Parameters.AddWithValue("@dien", Int32.Parse(txtSoDienCu.Text));
                     lenh.Parameters.AddWithValue("@nuoc", Int32.Parse(txtSoNuocCu.Text));
@@ -55,14 +59,14 @@ namespace QuanLyPhongTro.Forms
 
 
                     //Lấy id của phòng vừa mới tạo
-                    var idPhong = (long)lenh.ExecuteScalar();
+                    idPhong = (long)lenh.ExecuteScalar();
 
                     foreach (ListViewItem item in lstPhuPhi.Items)
                     {
                         string maPhuPhi = item.SubItems[0].Text;
 
                         string truyVanPhongVaPhuPhi = @"INSERT INTO PhongVaPhuPhi (MaPhong, MaPhuPhi)
-                                                            VALUES (@maPhong, @maPhuPhi)";
+                                                        VALUES (@maPhong, @maPhuPhi)";
                         using (SQLiteCommand lenhThemQuanHe = new SQLiteCommand(truyVanPhongVaPhuPhi, CaiDat.CSDL))
                         {
                             lenhThemQuanHe.Parameters.AddWithValue("@maPhong", idPhong);
@@ -71,8 +75,25 @@ namespace QuanLyPhongTro.Forms
                         }
                     }
                 }
+
                 transaction.Commit();
+
+                //Load lại danh sách phòng
+                _userControlQuanLyPhong.CapNhatDanhSachPhong();
+
+                //Focus vào phòng vừa thêm cho dễ quan sát
+                foreach (ListViewItem item in _userControlQuanLyPhong.lvQuanLyPhong.Items)
+                {
+                    if (long.Parse(item.Text) == idPhong)
+                    {
+                        item.Selected = true;
+                        item.EnsureVisible(); 
+                        break;
+                    }
+                }
+
                 ClearForm();
+                
             }
             catch (Exception err)
             {
@@ -91,9 +112,7 @@ namespace QuanLyPhongTro.Forms
             txtSoDienCu.Clear();
             txtSoNuocCu.Clear();
             txtGhiChu.Clear();
-
             cbPhuPhi.SelectedItem = null;
-
             lstPhuPhi.Items.Clear();
         }
 
