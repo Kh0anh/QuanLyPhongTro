@@ -173,7 +173,7 @@
             this.btnThemPhuPhi.Depth = 0;
             this.btnThemPhuPhi.HighEmphasis = true;
             this.btnThemPhuPhi.Icon = null;
-            this.btnThemPhuPhi.Location = new System.Drawing.Point(362, 30);
+            this.btnThemPhuPhi.Location = new System.Drawing.Point(352, 30);
             this.btnThemPhuPhi.Margin = new System.Windows.Forms.Padding(5, 7, 5, 7);
             this.btnThemPhuPhi.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnThemPhuPhi.Name = "btnThemPhuPhi";

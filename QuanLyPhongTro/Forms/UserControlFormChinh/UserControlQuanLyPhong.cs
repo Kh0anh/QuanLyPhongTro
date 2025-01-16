@@ -88,10 +88,9 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
 
             return strPhuPhi.Substring(0, strPhuPhi.Length - 2);
         }
-
         private void toolThemPhong_Click(object sender, EventArgs e)
         {
-            new FormThemPhong().Show();
+            new FormThemPhong(this).Show();
         }
 
         private void toolSuaPhong_Click(object sender, EventArgs e)
