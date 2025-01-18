@@ -40,7 +40,7 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
                     //Thêm dữ liệu vào lvPhongTro
                     ListViewItem item = new ListViewItem(((Int64)doc["MaPhong"]).ToString());
                     item.SubItems.Add((string)doc["TenPhong"]);
-                    item.SubItems.Add(((Int64)doc["GiaPhong"]).ToString("N2"));
+                    item.SubItems.Add(((Int64)doc["GiaPhong"]).ToString("N0"));
 
                     if ((Int64)doc["PhuPhi"] > 0)
                     {

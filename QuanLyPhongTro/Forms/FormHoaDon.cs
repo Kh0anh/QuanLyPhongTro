@@ -14,7 +14,7 @@ namespace QuanLyPhongTro.Forms
             tbTenPhong.Text = tenPhong;
             if (double.TryParse(giaPhong, out double tphong))
             {
-                tbTienPhong.Text = tphong.ToString("N2");
+                tbTienPhong.Text = tphong.ToString("N0");
             }
             else
             {
@@ -23,7 +23,7 @@ namespace QuanLyPhongTro.Forms
             tbKhachThue.Text = nguoiThue;
             if (double.TryParse(giaDien, out double giaDienF))
             {
-                tbGiaDien.Text = giaDienF.ToString("N2");
+                tbGiaDien.Text = giaDienF.ToString("N0");
             }
             else
             {
@@ -31,7 +31,7 @@ namespace QuanLyPhongTro.Forms
             }
             if (double.TryParse(giaNuoc, out double giaNuocF))
             {
-                tbGiaNuoc.Text = giaNuocF.ToString("N2");
+                tbGiaNuoc.Text = giaNuocF.ToString("N0");
             }
             else
             {

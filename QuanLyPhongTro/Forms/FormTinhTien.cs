@@ -18,8 +18,8 @@ namespace QuanLyPhongTro.Forms
             tbSoNuocCu.Text = soNuocCu;
             tbGiaPhong.Text = giaPhong;
             
-            tbGiaDien.Text = CaiDat._GiaDien.ToString("N2");
-            tbGiaNuoc.Text = CaiDat._GiaNuoc.ToString("N");
+            tbGiaDien.Text = CaiDat._GiaDien.ToString("N0");
+            tbGiaNuoc.Text = CaiDat._GiaNuoc.ToString("N0");
         }
 
         private void tbXuatHoaDon_Click(object sender, EventArgs e)
@@ -90,7 +90,7 @@ namespace QuanLyPhongTro.Forms
                 if (dm >= dc)
                 {
                     double tong = (dm - dc) * gd;
-                    tbTongTienDien.Text = tong.ToString("N2");
+                    tbTongTienDien.Text = tong.ToString("N0");
                 }
                 else
                 {
@@ -117,7 +117,7 @@ namespace QuanLyPhongTro.Forms
                 if (nm >= nc)
                 {
                     double tong = (nm - nc) * gn;
-                    tbTongTienNuoc.Text = tong.ToString("N2");
+                    tbTongTienNuoc.Text = tong.ToString("N0");
                 }
                 else
                 {
@@ -150,7 +150,7 @@ namespace QuanLyPhongTro.Forms
                         return;
                     }
                 }
-                tbTongTienPhuPhi.Text = tongPhuPhi.ToString("N2");
+                tbTongTienPhuPhi.Text = tongPhuPhi.ToString("N0");
             }
             catch (Exception ex)
             {
@@ -165,7 +165,7 @@ namespace QuanLyPhongTro.Forms
                 if (double.TryParse(tbTongTienDien.Text, out double tDien) && double.TryParse(tbTongTienNuoc.Text, out double tNuoc) 
                     && double.TryParse(tbTongTienPhuPhi.Text,out double tPhuPhi) && double.TryParse(tbGiaPhong.Text,out double gPhong)){
                     double tongTien = tDien + tNuoc + tPhuPhi + gPhong;
-                    tbTongTien.Text = tongTien.ToString("N2");
+                    tbTongTien.Text = tongTien.ToString("N0");
                 }
                 else 
                 { 
