@@ -202,6 +202,7 @@
             this.tbGiaPhong.Text = "";
             this.tbGiaPhong.TrailingIcon = null;
             this.tbGiaPhong.UseTallSize = false;
+            this.tbGiaPhong.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbSoDienMoi_KeyPress);
             // 
             // tbHuyTinhTien
             // 
@@ -359,6 +360,7 @@
             this.tbGiaNuoc.TrailingIcon = null;
             this.tbGiaNuoc.UseTallSize = false;
             this.tbGiaNuoc.TextChanged += new System.EventHandler(this.tbGiaNuoc_TextChanged);
+            this.tbGiaNuoc.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbSoDienMoi_KeyPress);
             // 
             // tbGiaDien
             // 
@@ -380,6 +382,7 @@
             this.tbGiaDien.TrailingIcon = null;
             this.tbGiaDien.UseTallSize = false;
             this.tbGiaDien.TextChanged += new System.EventHandler(this.tbGiaDien_TextChanged);
+            this.tbGiaDien.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbSoDienMoi_KeyPress);
             // 
             // tbSoNuocMoi
             // 
@@ -401,6 +404,7 @@
             this.tbSoNuocMoi.TrailingIcon = null;
             this.tbSoNuocMoi.UseTallSize = false;
             this.tbSoNuocMoi.TextChanged += new System.EventHandler(this.tbSoNuocMoi_TextChanged);
+            this.tbSoNuocMoi.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbSoDienMoi_KeyPress);
             // 
             // tbSoDienMoi
             // 
@@ -421,7 +425,8 @@
             this.tbSoDienMoi.Text = "";
             this.tbSoDienMoi.TrailingIcon = null;
             this.tbSoDienMoi.UseTallSize = false;
-            this.tbSoDienMoi.TextChanged += new System.EventHandler(this.tbSoDienMoi_TextChanged);
+            this.tbSoDienMoi.TextChanged += new System.EventHandler(this.TbSoDienMoi_TextChanged);
+            this.tbSoDienMoi.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbSoDienMoi_KeyPress);
             // 
             // groupBox3
             // 

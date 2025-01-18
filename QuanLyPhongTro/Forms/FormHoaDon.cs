@@ -12,9 +12,16 @@ namespace QuanLyPhongTro.Forms
             InitializeComponent();
 
             tbTenPhong.Text = tenPhong;
-            tbTienPhong.Text = giaPhong;
+            if (double.TryParse(giaPhong, out double tphong))
+            {
+                tbTienPhong.Text = tphong.ToString("N2");
+            }
+            else
+            {
+                tbTienPhong.Text = "0";
+            }
             tbKhachThue.Text = nguoiThue;
-            if (float.TryParse(giaDien, out float giaDienF))
+            if (double.TryParse(giaDien, out double giaDienF))
             {
                 tbGiaDien.Text = giaDienF.ToString("N2");
             }
@@ -22,7 +29,7 @@ namespace QuanLyPhongTro.Forms
             {
                 tbGiaDien.Text = "0.00";
             }
-            if (float.TryParse(giaNuoc, out float giaNuocF))
+            if (double.TryParse(giaNuoc, out double giaNuocF))
             {
                 tbGiaNuoc.Text = giaNuocF.ToString("N2");
             }
@@ -46,10 +53,10 @@ namespace QuanLyPhongTro.Forms
             {
                 SoDienCu = SoDienCu.Trim();
                 SoDienMoi = SoDienMoi.Trim();
-                if (float.TryParse(SoDienCu, out float dc) && float.TryParse(SoDienMoi,out float dm) )
+                if (double.TryParse(SoDienCu, out double dc) && double.TryParse(SoDienMoi,out double dm) )
                 {
                     if (dm >= dc) {
-                        float soDien = dm - dc;
+                        double soDien = dm - dc;
                         tbSoDien.Text = soDien.ToString();
                     }
                     else
@@ -76,11 +83,11 @@ namespace QuanLyPhongTro.Forms
             {
                 SoNuocCu = SoNuocCu.Trim();
                 SoNuocMoi = SoNuocMoi.Trim();
-                if (float.TryParse(SoNuocCu, out float nc) && float.TryParse(SoNuocMoi, out float nm))
+                if (double.TryParse(SoNuocCu, out double nc) && double.TryParse(SoNuocMoi, out double nm))
                 {
                     if (nm >= nc)
                     {
-                        float soNuoc = nm - nc;
+                        double soNuoc = nm - nc;
                         tbSoNuoc.Text = soNuoc.ToString();
                     }
                     else

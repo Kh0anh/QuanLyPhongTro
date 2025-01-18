@@ -17,7 +17,9 @@ namespace QuanLyPhongTro.Forms
             tbSoDienCu.Text = soDienCu;
             tbSoNuocCu.Text = soNuocCu;
             tbGiaPhong.Text = giaPhong;
-
+            
+            tbGiaDien.Text = CaiDat._GiaDien.ToString("N2");
+            tbGiaNuoc.Text = CaiDat._GiaNuoc.ToString("N");
         }
 
         private void tbXuatHoaDon_Click(object sender, EventArgs e)
@@ -206,18 +208,7 @@ namespace QuanLyPhongTro.Forms
            
         }
 
-        private void loadGiaDienNuoc()
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi: {ex.Message}", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        private void tbSoDienMoi_TextChanged(object sender, EventArgs e)
+        private void TbSoDienMoi_TextChanged(object sender, EventArgs e)
         {
             TongTienDien();
             TinhTongTien();
@@ -313,6 +304,12 @@ namespace QuanLyPhongTro.Forms
             {
                 MessageBox.Show($"Lỗi: {ex.Message}", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void tbSoDienMoi_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(e.KeyChar >= '0' && e.KeyChar <= '9' || e.KeyChar == (char)(8)))
+                e.Handled = true;
         }
     }
 }
