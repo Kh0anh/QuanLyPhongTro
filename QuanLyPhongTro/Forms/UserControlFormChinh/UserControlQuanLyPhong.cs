@@ -11,6 +11,7 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
         public UserControlQuanLyPhong()
         {
             InitializeComponent();
+            LoadDanhSachPhong();
         }
 
         private void UserControlQuanLyPhong_Load(object sender, EventArgs e)
@@ -95,7 +96,18 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
 
         private void toolSuaPhong_Click(object sender, EventArgs e)
         {
-            new FormChinhSuaPhong().Show();
+        
+            if (lvQuanLyPhong.SelectedItems.Count > 0)
+            {
+                string maPhong = lvQuanLyPhong.SelectedItems[0].Text;
+
+                // Mở form chỉnh sửa và truyền mã phòng
+                FormChinhSuaPhong formChinhSua = new FormChinhSuaPhong(maPhong);
+                formChinhSua.ShowDialog();
+
+                // Cập nhật lại danh sách phòng sau khi chỉnh sửa
+                CapNhatDanhSachPhong();
+            }
         }
 
         private void toolTinhTien_Click(object sender, EventArgs e)
@@ -140,7 +152,17 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
 
         private void toolChinhTrangThai_Click(object sender, EventArgs e)
         {
-            new FormChinhSuaTrangThai().Show();
+            if (lvQuanLyPhong.SelectedItems.Count > 0)
+            {
+                string TrangThai = lvQuanLyPhong.SelectedItems[0].Text;
+
+                // Mở form chỉnh sửa và truyền mã phòng
+                FormChinhSuaTrangThai formChinhSua = new FormChinhSuaTrangThai(TrangThai);
+                formChinhSua.ShowDialog();
+
+                // Cập nhật lại danh sách phòng sau khi chỉnh sửa
+                CapNhatDanhSachPhong();
+            }
         }
         private ListViewItem[] layDanhSachPhong()
         {
@@ -151,5 +173,31 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
             }
             return danhSachphong.ToArray();
         }
+
+        private void LoadDanhSachPhong()
+        {
+            // Tải danh sách phòng vào ListView
+            lvQuanLyPhong.Items.Clear();
+            try
+            {
+                string query = "SELECT MaPhong, TenPhong FROM Phong WHERE Xoa == 0";
+                using (SQLiteCommand cmd = new SQLiteCommand(query, CaiDat.CSDL))
+                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ListViewItem item = new ListViewItem(reader["MaPhong"].ToString());
+                        item.SubItems.Add(reader["TenPhong"].ToString());
+                        lvQuanLyPhong.Items.Add(item);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải danh sách phòng: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+       
     }
 }

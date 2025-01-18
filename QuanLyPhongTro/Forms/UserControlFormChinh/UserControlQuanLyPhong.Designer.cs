@@ -70,12 +70,13 @@
             this.lvQuanLyPhong.FullRowSelect = true;
             this.lvQuanLyPhong.HideSelection = false;
             this.lvQuanLyPhong.Location = new System.Drawing.Point(0, 0);
-            this.lvQuanLyPhong.MinimumSize = new System.Drawing.Size(200, 100);
+            this.lvQuanLyPhong.Margin = new System.Windows.Forms.Padding(4);
+            this.lvQuanLyPhong.MinimumSize = new System.Drawing.Size(267, 123);
             this.lvQuanLyPhong.MouseLocation = new System.Drawing.Point(-1, -1);
             this.lvQuanLyPhong.MouseState = MaterialSkin.MouseState.OUT;
             this.lvQuanLyPhong.Name = "lvQuanLyPhong";
             this.lvQuanLyPhong.OwnerDraw = true;
-            this.lvQuanLyPhong.Size = new System.Drawing.Size(800, 400);
+            this.lvQuanLyPhong.Size = new System.Drawing.Size(1067, 492);
             this.lvQuanLyPhong.TabIndex = 0;
             this.lvQuanLyPhong.UseCompatibleStateImageBehavior = false;
             this.lvQuanLyPhong.View = System.Windows.Forms.View.Details;
@@ -134,6 +135,7 @@
             // 
             this.cmQuanLyPhong.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.cmQuanLyPhong.Depth = 0;
+            this.cmQuanLyPhong.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.cmQuanLyPhong.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolThemPhong,
             this.toolSuaPhong,
@@ -142,50 +144,51 @@
             this.toolXoa});
             this.cmQuanLyPhong.MouseState = MaterialSkin.MouseState.HOVER;
             this.cmQuanLyPhong.Name = "contextMenuStrip1";
-            this.cmQuanLyPhong.Size = new System.Drawing.Size(166, 114);
+            this.cmQuanLyPhong.Size = new System.Drawing.Size(189, 124);
             // 
             // toolThemPhong
             // 
             this.toolThemPhong.Name = "toolThemPhong";
-            this.toolThemPhong.Size = new System.Drawing.Size(165, 22);
+            this.toolThemPhong.Size = new System.Drawing.Size(188, 24);
             this.toolThemPhong.Text = "Thêm Phòng";
             this.toolThemPhong.Click += new System.EventHandler(this.toolThemPhong_Click);
             // 
             // toolSuaPhong
             // 
             this.toolSuaPhong.Name = "toolSuaPhong";
-            this.toolSuaPhong.Size = new System.Drawing.Size(165, 22);
+            this.toolSuaPhong.Size = new System.Drawing.Size(188, 24);
             this.toolSuaPhong.Text = "Sửa Phòng";
             this.toolSuaPhong.Click += new System.EventHandler(this.toolSuaPhong_Click);
             // 
             // toolChinhTrangThai
             // 
             this.toolChinhTrangThai.Name = "toolChinhTrangThai";
-            this.toolChinhTrangThai.Size = new System.Drawing.Size(165, 22);
+            this.toolChinhTrangThai.Size = new System.Drawing.Size(188, 24);
             this.toolChinhTrangThai.Text = "Chỉnh Trạng Thái";
             this.toolChinhTrangThai.Click += new System.EventHandler(this.toolChinhTrangThai_Click);
             // 
             // toolTinhTien
             // 
             this.toolTinhTien.Name = "toolTinhTien";
-            this.toolTinhTien.Size = new System.Drawing.Size(165, 22);
+            this.toolTinhTien.Size = new System.Drawing.Size(188, 24);
             this.toolTinhTien.Text = "Tính Tiền";
             this.toolTinhTien.Click += new System.EventHandler(this.toolTinhTien_Click);
             // 
             // toolXoa
             // 
             this.toolXoa.Name = "toolXoa";
-            this.toolXoa.Size = new System.Drawing.Size(165, 22);
+            this.toolXoa.Size = new System.Drawing.Size(188, 24);
             this.toolXoa.Text = "Xoá";
             this.toolXoa.Click += new System.EventHandler(this.toolXoa_Click);
             // 
             // UserControlQuanLyPhong
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.lvQuanLyPhong);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "UserControlQuanLyPhong";
-            this.Size = new System.Drawing.Size(800, 400);
+            this.Size = new System.Drawing.Size(1067, 492);
             this.Load += new System.EventHandler(this.UserControlQuanLyPhong_Load);
             this.cmQuanLyPhong.ResumeLayout(false);
             this.ResumeLayout(false);
