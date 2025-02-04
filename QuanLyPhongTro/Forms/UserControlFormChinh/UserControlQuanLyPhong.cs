@@ -75,7 +75,7 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
         private string layDanhSachPhuPhi(Int64 maPhong)
         {
             string strPhuPhi = "";
-            using (SQLiteCommand truyVan = new SQLiteCommand("SELECT p.TenPhuPhi FROM PhongVaPhuPhi p INNER JOIN PhuPhi f ON p.MaPhuPhi=f.MaPhuPhi WHERE u.MaPhong==@maPhong", CaiDat.CSDL))
+            using (SQLiteCommand truyVan = new SQLiteCommand("SELECT pp.TenPhuPhi FROM PhongVaPhuPhi pvp INNER JOIN PhuPhi pp ON pvp.MaPhuPhi=pp.MaPhuPhi WHERE pvp.MaPhong==@maPhong", CaiDat.CSDL))
             {
                 truyVan.Parameters.AddWithValue("@maPhong", maPhong);
                 using (SQLiteDataReader doc = truyVan.ExecuteReader())
@@ -87,7 +87,11 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
                 }
             }
 
-            return strPhuPhi.Substring(0, strPhuPhi.Length - 2);
+            if (strPhuPhi.Length > 0) {
+                return strPhuPhi.Substring(0, strPhuPhi.Length - 2);
+            }
+
+            return strPhuPhi;
         }
         private void toolThemPhong_Click(object sender, EventArgs e)
         {

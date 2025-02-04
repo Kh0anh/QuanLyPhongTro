@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -22,7 +23,6 @@ namespace QuanLyPhongTro.Forms
             {
                 return;
             }
-            HienThiDanhSachPhuPhi();
             LayDanhSachPhuPhi();
         }
 
@@ -50,7 +50,7 @@ namespace QuanLyPhongTro.Forms
                 {
                     lenh.Parameters.AddWithValue("@ten", txtTenPhong.Text);
                     lenh.Parameters.AddWithValue("@gia", Int32.Parse(txtGiaPhong.Text));
-                    lenh.Parameters.AddWithValue("@phuPhi", 0);
+                    lenh.Parameters.AddWithValue("@phuPhi", lstPhuPhi.Items.Count);
                     lenh.Parameters.AddWithValue("@trangThai", 0);
                     lenh.Parameters.AddWithValue("@ngayThue", DateTime.Now.ToString("dd-MM-yyyy"));
                     lenh.Parameters.AddWithValue("@dien", Int32.Parse(txtSoDienCu.Text));
@@ -135,23 +135,16 @@ namespace QuanLyPhongTro.Forms
                     return;
                 }
 
-                
-                string phuPhi = cbPhuPhi.SelectedItem.ToString();
-
-                //Truy vấn lấy phụ phí từ CSDL để thêm vào listview
-                string truyVan = "SELECT MaPhuPhi, GiaPhuPhi FROM PhuPhi WHERE TenPhuPhi = @phuPhi";
+                string truyVan = "SELECT MaPhuPhi, TenPhuPhi, GiaPhuPhi FROM PhuPhi WHERE MaPhuPhi = @maPhuphi";
                 using (SQLiteCommand lenh = new SQLiteCommand(truyVan, CaiDat.CSDL))
                 {
-                    lenh.Parameters.AddWithValue("@phuPhi", phuPhi);
+                    lenh.Parameters.AddWithValue("@maPhuphi", cbPhuPhi.SelectedValue);
                     using (SQLiteDataReader doc = lenh.ExecuteReader())
                     {
                         while (doc.Read())
                         {
-                            string maPhuPhi = doc["MaPhuPhi"].ToString();
-
-                            // Thêm phụ phí vào ListView
-                            ListViewItem item = new ListViewItem(maPhuPhi);
-                            item.SubItems.Add(phuPhi);
+                            ListViewItem item = new ListViewItem(((Int64)doc["MaPhuPhi"]).ToString());
+                            item.SubItems.Add((string)doc["TenPhuPhi"]);
                             item.SubItems.Add(((int)doc["GiaPhuPhi"]).ToString());
                             lstPhuPhi.Items.Add(item);
                         }
@@ -177,64 +170,17 @@ namespace QuanLyPhongTro.Forms
                     return;
                 }
 
-                string phuPhi = lstPhuPhi.SelectedItems[0].SubItems[1].Text;
-
-                //Truy vấn xóa phụ phí được chọn
-                string truyVan = "SELECT MaPhuPhi FROM PhuPhi WHERE TenPhuPhi = @phuPhi";
-                using (SQLiteCommand lenh = new SQLiteCommand(truyVan, CaiDat.CSDL))
-                {
-                    lenh.Parameters.AddWithValue(@phuPhi, phuPhi);
-                    var maPhuPhi = lenh.ExecuteScalar();
-
-                    if (maPhuPhi != null)
-                    {
-                        // Xóa liên kết trong bảng PhongVaPhuPhi
-                        string truyVanXoa = "DELETE FROM PhongVaPhuPhi WHERE MaPhuPhi = @maPhuPhi";
-                        using (SQLiteCommand cmdDelete = new SQLiteCommand(truyVanXoa, CaiDat.CSDL))
-                        {
-                            cmdDelete.Parameters.AddWithValue("@maPhuPhi", maPhuPhi);
-                            cmdDelete.ExecuteNonQuery();
-                        }
-                    }
+                foreach(ListViewItem item in lstPhuPhi.SelectedItems){
+                    lstPhuPhi.Items.Remove(item);
                 }
+
+           
             }
             catch (Exception err)
             {
                 MaterialMessageBox.Show(err.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
-        //Hiển thị danh sách phụ phí lên listview
-        private void HienThiDanhSachPhuPhi()
-        {
-            //Xóa danh sách listview cũ trước khi hiển thị cái mới
-            lstPhuPhi.Items.Clear();
-            try
-            {
-                //Truy vấn lấy các thuộc tính từ bảng Phụ Phí
-                string truyVan = "SELECT MaPhuPhi, TenPhuPhi, GiaPhuPhi FROM PhuPhi WHERE Xoa == 0";
-                using (SQLiteCommand cmd = new SQLiteCommand(truyVan, CaiDat.CSDL))
-                {
-                    using (SQLiteDataReader doc = cmd.ExecuteReader())
-                    {
-                        while (doc.Read())
-                        {   
-                            //Thêm các item vào trong litsview
-                            ListViewItem item = new ListViewItem(doc["MaPhuPhi"].ToString());
-                            item.SubItems.Add((string)doc["TenPhuPhi"]);
-                            item.SubItems.Add(((Int64)doc["GiaPhuPhi"]).ToString());
-                            lstPhuPhi.Items.Add(item);
-                        }
-                    }
-                }
-            }
-            catch (Exception err)
-            {
-                MaterialMessageBox.Show(err.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
 
         //Đưa dữ liệu các phụ phí vào trong combobox
         private void LayDanhSachPhuPhi()
@@ -242,9 +188,11 @@ namespace QuanLyPhongTro.Forms
             // Xóa danh sách phụ phí cũ trước khi thêm mới vào ComboBox
             cbPhuPhi.Items.Clear();
             try
-            {  
+            {
+                List<KeyValuePair<Int64, string>> items = new List<KeyValuePair<Int64, string>> { };
+
                 // Truy vấn lấy danh sách tên phụ phí từ bảng PhuPhi
-                string truyVan = "SELECT TenPhuPhi FROM PhuPhi"; 
+                string truyVan = "SELECT MaPhuPhi, TenPhuPhi FROM PhuPhi"; 
                 using (SQLiteCommand cmd = new SQLiteCommand(truyVan, CaiDat.CSDL))
                 {
                     // Đọc dữ liệu trả về
@@ -254,12 +202,18 @@ namespace QuanLyPhongTro.Forms
                         while (doc.Read())
                         {
                             // Lấy tên phụ phí từ mỗi dòng
+                            Int64 maPhuPhi = (Int64)doc["MaPhuPhi"];
                             string tenPhuPhi = doc["TenPhuPhi"].ToString();
+
                             // Thêm vào ComboBox
-                            cbPhuPhi.Items.Add(tenPhuPhi); 
+                            items.Add(new KeyValuePair<Int64, string> (maPhuPhi,tenPhuPhi)); 
                         }
                     }
                 }
+
+                cbPhuPhi.DataSource = items;
+                cbPhuPhi.DisplayMember = "Value";
+                cbPhuPhi.ValueMember = "Key";
             }
             catch (Exception err)
             {
