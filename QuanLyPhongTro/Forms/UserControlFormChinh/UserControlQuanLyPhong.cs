@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -40,7 +41,7 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
                     //Thêm dữ liệu vào lvPhongTro
                     ListViewItem item = new ListViewItem(((Int64)doc["MaPhong"]).ToString());
                     item.SubItems.Add((string)doc["TenPhong"]);
-                    item.SubItems.Add(((Int64)doc["GiaPhong"]).ToString());
+                    item.SubItems.Add(((Int64)doc["GiaPhong"]).ToString("N0"));
 
                     if ((Int64)doc["PhuPhi"] > 0)
                     {
@@ -116,7 +117,23 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
 
         private void toolTinhTien_Click(object sender, EventArgs e)
         {
-            new FormTinhTien().Show();
+            if (lvQuanLyPhong.SelectedItems.Count > 0)
+            {
+                var SelectedItem = lvQuanLyPhong.SelectedItems[0];
+                string maPhong = SelectedItem.SubItems[0].Text;
+                string tenPhong = SelectedItem.SubItems[1].Text;
+                string giaPhong = SelectedItem.SubItems[2].Text;
+                string phuPhi = SelectedItem.SubItems[3].Text;
+                string trangThai = SelectedItem.SubItems[4].Text;
+                string nguoiThue =  SelectedItem.SubItems[5].Text;
+                string ngayThue = SelectedItem.SubItems[6].Text;
+                string soDienCu = SelectedItem.SubItems[7].Text;
+                string soNuocCu = SelectedItem.SubItems[8].Text;
+                string ghiChu = SelectedItem.SubItems[9].Text;
+
+                FormTinhTien formTinhTien = new FormTinhTien(maPhong,tenPhong,giaPhong,phuPhi,trangThai,nguoiThue,ngayThue,soDienCu,soNuocCu,ghiChu);
+                formTinhTien.ShowDialog();
+            }
         }
 
         private void toolXoa_Click(object sender, EventArgs e)
