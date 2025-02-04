@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
 
@@ -82,6 +83,63 @@ namespace QuanLyPhongTro
                     truyVan.ExecuteNonQuery();
                 }
             }
+        }
+
+        public static void ThemPhuPhi(string tenPhuPhi, int giaPhuPhi)
+        {
+            if (string.IsNullOrEmpty(tenPhuPhi))
+            {
+                throw new ArgumentException("Tên phụ phí không được để trống.");
+            }
+
+            string lenhThemPhuPhi = @"INSERT INTO PhuPhi (TenPhuPhi, GiaPhuphi, Xoa) 
+                              VALUES (@tenPhuPhi, @giaPhuPhi, 0);";
+
+            using (SQLiteCommand truyVan = new SQLiteCommand(lenhThemPhuPhi, CSDL))
+            {
+                truyVan.Parameters.AddWithValue("@tenPhuPhi", tenPhuPhi);
+                truyVan.Parameters.AddWithValue("@giaPhuPhi", giaPhuPhi);
+
+                truyVan.ExecuteNonQuery();
+            }
+        }
+
+        public static void XoaPhuPhi(int maPhuPhi)
+        {
+            string lenhXoaPhuPhi = @"UPDATE PhuPhi 
+                             SET Xoa = 1 
+                             WHERE MaPhuPhi = @maPhuPhi;";
+
+            using (SQLiteCommand truyVan = new SQLiteCommand(lenhXoaPhuPhi, CSDL))
+            {
+                truyVan.Parameters.AddWithValue("@maPhuPhi", maPhuPhi);
+
+                truyVan.ExecuteNonQuery();
+            }
+        }
+
+        public static List<(int MaPhuPhi, string TenPhuPhi, int GiaPhuPhi)> LayDanhSachPhuPhi()
+        {
+            List<(int, string, int)> danhSachPhuPhi = new List<(int, string, int)>();
+
+            string lenhLayPhuPhi = @"SELECT MaPhuPhi, TenPhuPhi, GiaPhuphi 
+                             FROM PhuPhi 
+                             WHERE Xoa = 0;";
+
+            using (SQLiteCommand truyVan = new SQLiteCommand(lenhLayPhuPhi, CSDL))
+            using (SQLiteDataReader docDL = truyVan.ExecuteReader())
+            {
+                while (docDL.Read())
+                {
+                    int maPhuPhi = docDL.GetInt32(0);
+                    string tenPhuPhi = docDL.GetString(1);
+                    int giaPhuPhi = docDL.GetInt32(2);
+
+                    danhSachPhuPhi.Add((maPhuPhi, tenPhuPhi, giaPhuPhi));
+                }
+            }
+
+            return danhSachPhuPhi;
         }
 
         public static void init()
