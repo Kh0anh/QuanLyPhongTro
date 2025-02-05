@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormChinhSuaTrangThai));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnHuyChinhSua = new MaterialSkin.Controls.MaterialButton();
             this.btnLuuChinhSua = new MaterialSkin.Controls.MaterialButton();
@@ -43,14 +44,12 @@
             this.groupBox1.Controls.Add(this.tbNguoiThue);
             this.groupBox1.Controls.Add(this.cbTrangThai);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(8, 33);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox1.Location = new System.Drawing.Point(6, 27);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(419, 187);
+            this.groupBox1.Size = new System.Drawing.Size(314, 168);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Chỉnh Sửa Trạng Thái";
+            this.groupBox1.Text = "Chỉnh sửa trạng thái";
             // 
             // btnHuyChinhSua
             // 
@@ -59,8 +58,8 @@
             this.btnHuyChinhSua.Depth = 0;
             this.btnHuyChinhSua.HighEmphasis = true;
             this.btnHuyChinhSua.Icon = null;
-            this.btnHuyChinhSua.Location = new System.Drawing.Point(48, 134);
-            this.btnHuyChinhSua.Margin = new System.Windows.Forms.Padding(5, 7, 5, 7);
+            this.btnHuyChinhSua.Location = new System.Drawing.Point(35, 123);
+            this.btnHuyChinhSua.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnHuyChinhSua.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnHuyChinhSua.Name = "btnHuyChinhSua";
             this.btnHuyChinhSua.NoAccentTextColor = System.Drawing.Color.Empty;
@@ -79,8 +78,8 @@
             this.btnLuuChinhSua.Depth = 0;
             this.btnLuuChinhSua.HighEmphasis = true;
             this.btnLuuChinhSua.Icon = null;
-            this.btnLuuChinhSua.Location = new System.Drawing.Point(233, 134);
-            this.btnLuuChinhSua.Margin = new System.Windows.Forms.Padding(5, 7, 5, 7);
+            this.btnLuuChinhSua.Location = new System.Drawing.Point(175, 123);
+            this.btnLuuChinhSua.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnLuuChinhSua.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnLuuChinhSua.Name = "btnLuuChinhSua";
             this.btnLuuChinhSua.NoAccentTextColor = System.Drawing.Color.Empty;
@@ -98,19 +97,17 @@
             this.tbNguoiThue.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbNguoiThue.Depth = 0;
             this.tbNguoiThue.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.tbNguoiThue.Hint = "Người Thuê";
+            this.tbNguoiThue.Hint = "Người thuê";
             this.tbNguoiThue.LeadingIcon = null;
-            this.tbNguoiThue.Location = new System.Drawing.Point(8, 79);
-            this.tbNguoiThue.Margin = new System.Windows.Forms.Padding(4);
+            this.tbNguoiThue.Location = new System.Drawing.Point(6, 64);
             this.tbNguoiThue.MaxLength = 50;
             this.tbNguoiThue.MouseState = MaterialSkin.MouseState.OUT;
             this.tbNguoiThue.Multiline = false;
             this.tbNguoiThue.Name = "tbNguoiThue";
-            this.tbNguoiThue.Size = new System.Drawing.Size(400, 36);
+            this.tbNguoiThue.Size = new System.Drawing.Size(300, 50);
             this.tbNguoiThue.TabIndex = 1;
             this.tbNguoiThue.Text = "";
             this.tbNguoiThue.TrailingIcon = null;
-            this.tbNguoiThue.UseTallSize = false;
             // 
             // cbTrangThai
             // 
@@ -128,14 +125,13 @@
             this.cbTrangThai.IntegralHeight = false;
             this.cbTrangThai.ItemHeight = 29;
             this.cbTrangThai.Items.AddRange(new object[] {
-            "Được Thuê",
-            "Phòng Trống"});
-            this.cbTrangThai.Location = new System.Drawing.Point(8, 28);
-            this.cbTrangThai.Margin = new System.Windows.Forms.Padding(4);
+            "Đang được thuê",
+            "Phòng trống"});
+            this.cbTrangThai.Location = new System.Drawing.Point(6, 23);
             this.cbTrangThai.MaxDropDownItems = 4;
             this.cbTrangThai.MouseState = MaterialSkin.MouseState.OUT;
             this.cbTrangThai.Name = "cbTrangThai";
-            this.cbTrangThai.Size = new System.Drawing.Size(399, 35);
+            this.cbTrangThai.Size = new System.Drawing.Size(300, 35);
             this.cbTrangThai.StartIndex = 0;
             this.cbTrangThai.TabIndex = 0;
             this.cbTrangThai.UseTallSize = false;
@@ -143,14 +139,15 @@
             // 
             // FormChinhSuaTrangThai
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(437, 228);
+            this.ClientSize = new System.Drawing.Size(328, 201);
             this.Controls.Add(this.groupBox1);
             this.FormStyle = MaterialSkin.Controls.MaterialForm.FormStyles.ActionBar_None;
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "FormChinhSuaTrangThai";
-            this.Padding = new System.Windows.Forms.Padding(4, 30, 4, 4);
+            this.Padding = new System.Windows.Forms.Padding(3, 24, 3, 3);
             this.Text = "FormChinhSuaTrangThai";
             this.Load += new System.EventHandler(this.FormChinhSuaTrangThai_Load);
             this.groupBox1.ResumeLayout(false);

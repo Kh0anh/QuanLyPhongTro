@@ -65,7 +65,7 @@
             this.tabQuanLyPhong.Padding = new System.Windows.Forms.Padding(3);
             this.tabQuanLyPhong.Size = new System.Drawing.Size(886, 356);
             this.tabQuanLyPhong.TabIndex = 0;
-            this.tabQuanLyPhong.Text = "Quản Lý Phòng";
+            this.tabQuanLyPhong.Text = "Quản lý phòng";
             this.tabQuanLyPhong.UseVisualStyleBackColor = true;
             // 
             // userControlQuanLyPhong
@@ -85,7 +85,7 @@
             this.tabCaiDat.Padding = new System.Windows.Forms.Padding(3);
             this.tabCaiDat.Size = new System.Drawing.Size(886, 356);
             this.tabCaiDat.TabIndex = 1;
-            this.tabCaiDat.Text = "Cài Đặt";
+            this.tabCaiDat.Text = "Cài đặt";
             this.tabCaiDat.UseVisualStyleBackColor = true;
             // 
             // userControlCaiDat1
@@ -112,6 +112,7 @@
             this.DrawerAutoHide = false;
             this.DrawerShowIconsWhenHidden = true;
             this.DrawerTabControl = this.tabControlChinh;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormChinh";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FormChinh";

@@ -23,6 +23,9 @@ namespace QuanLyPhongTro.Forms
             {
                 return;
             }
+
+            this.Text = string.Format("{0} - {1}", CaiDat.TenPhanMem, "Thêm Phòng");
+
             LayDanhSachPhuPhi();
         }
 
@@ -145,7 +148,7 @@ namespace QuanLyPhongTro.Forms
                         {
                             ListViewItem item = new ListViewItem(((Int64)doc["MaPhuPhi"]).ToString());
                             item.SubItems.Add((string)doc["TenPhuPhi"]);
-                            item.SubItems.Add(((int)doc["GiaPhuPhi"]).ToString());
+                            item.SubItems.Add(((Int64)doc["GiaPhuPhi"]).ToString());
                             lstPhuPhi.Items.Add(item);
                         }
                     }
@@ -219,6 +222,16 @@ namespace QuanLyPhongTro.Forms
             {
                 MaterialMessageBox.Show(err.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        protected override void WndProc(ref Message m)
+        {
+            const int WM_SYSCOMMAND = 0x0112;
+            const int SC_SIZE = 0xF000;
+
+            if (m.Msg == WM_SYSCOMMAND && (m.WParam.ToInt32() & 0xFFF0) == SC_SIZE)
+                return;
+
+            base.WndProc(ref m);
         }
 
     }

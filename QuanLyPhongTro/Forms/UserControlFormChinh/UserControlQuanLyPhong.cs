@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -12,7 +11,6 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
         public UserControlQuanLyPhong()
         {
             InitializeComponent();
-            LoadDanhSachPhong();
         }
 
         private void UserControlQuanLyPhong_Load(object sender, EventArgs e)
@@ -88,7 +86,8 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
                 }
             }
 
-            if (strPhuPhi.Length > 0) {
+            if (strPhuPhi.Length > 0)
+            {
                 return strPhuPhi.Substring(0, strPhuPhi.Length - 2);
             }
 
@@ -101,17 +100,23 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
 
         private void toolSuaPhong_Click(object sender, EventArgs e)
         {
-        
-            if (lvQuanLyPhong.SelectedItems.Count > 0)
+            ListViewItem[] danhSachPhong = layDanhSachPhong();
+            if (danhSachPhong.Length > 0)
             {
-                string maPhong = lvQuanLyPhong.SelectedItems[0].Text;
+                foreach (var phong in danhSachPhong)
+                {
+                    Task.Run(() =>
+                    {
+                        string maPhong = phong.Text;
+                        FormChinhSuaPhong formChinhSua = new FormChinhSuaPhong(maPhong);
+                        formChinhSua.ShowDialog();
 
-                // Mở form chỉnh sửa và truyền mã phòng
-                FormChinhSuaPhong formChinhSua = new FormChinhSuaPhong(maPhong);
-                formChinhSua.ShowDialog();
-
-                // Cập nhật lại danh sách phòng sau khi chỉnh sửa
-                CapNhatDanhSachPhong();
+                        Invoke((MethodInvoker)(() =>
+                        {
+                            CapNhatDanhSachPhong();
+                        }));
+                    });
+                }
             }
         }
 
@@ -125,13 +130,13 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
                 string giaPhong = SelectedItem.SubItems[2].Text;
                 string phuPhi = SelectedItem.SubItems[3].Text;
                 string trangThai = SelectedItem.SubItems[4].Text;
-                string nguoiThue =  SelectedItem.SubItems[5].Text;
+                string nguoiThue = SelectedItem.SubItems[5].Text;
                 string ngayThue = SelectedItem.SubItems[6].Text;
                 string soDienCu = SelectedItem.SubItems[7].Text;
                 string soNuocCu = SelectedItem.SubItems[8].Text;
                 string ghiChu = SelectedItem.SubItems[9].Text;
 
-                FormTinhTien formTinhTien = new FormTinhTien(maPhong,tenPhong,giaPhong,phuPhi,trangThai,nguoiThue,ngayThue,soDienCu,soNuocCu,ghiChu);
+                FormTinhTien formTinhTien = new FormTinhTien(maPhong, tenPhong, giaPhong, phuPhi, trangThai, nguoiThue, ngayThue, soDienCu, soNuocCu, ghiChu);
                 formTinhTien.ShowDialog();
             }
         }
@@ -194,31 +199,5 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
             }
             return danhSachphong.ToArray();
         }
-
-        private void LoadDanhSachPhong()
-        {
-            // Tải danh sách phòng vào ListView
-            lvQuanLyPhong.Items.Clear();
-            try
-            {
-                string query = "SELECT MaPhong, TenPhong FROM Phong WHERE Xoa == 0";
-                using (SQLiteCommand cmd = new SQLiteCommand(query, CaiDat.CSDL))
-                using (SQLiteDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        ListViewItem item = new ListViewItem(reader["MaPhong"].ToString());
-                        item.SubItems.Add(reader["TenPhong"].ToString());
-                        lvQuanLyPhong.Items.Add(item);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi tải danh sách phòng: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-       
     }
 }

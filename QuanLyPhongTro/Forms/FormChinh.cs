@@ -29,6 +29,7 @@ namespace QuanLyPhongTro.Forms
 
         private void FormChinh_Load(object sender, System.EventArgs e)
         {
+            this.Text = CaiDat.TenPhanMem;
         }
     }
 }

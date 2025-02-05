@@ -1,5 +1,6 @@
 ﻿using MaterialSkin.Controls;
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.Windows.Controls;
@@ -9,9 +10,12 @@ namespace QuanLyPhongTro.Forms
 {
     public partial class FormTinhTien : MaterialForm
     {
-        public FormTinhTien(string maPhong,string tenPhong,string giaPhong, string phuPhi, string trangThai,string nguoiThue,string ngayThue, string soDienCu, string soNuocCu, string ghiChu)
+        private string maPhong;
+        public FormTinhTien(string _maPhong,string tenPhong,string giaPhong, string phuPhi, string trangThai,string nguoiThue,string ngayThue, string soDienCu, string soNuocCu, string ghiChu)
         {
             InitializeComponent();
+            maPhong = _maPhong;
+
             tbTenPhong.Text = tenPhong;
             tbNguoiThue.Text = nguoiThue;
             tbSoDienCu.Text = soDienCu;
@@ -60,6 +64,17 @@ namespace QuanLyPhongTro.Forms
                 string tongTienPhuPhi = tbTongTienPhuPhi.Text;
                 string tongTien = tbTongTien.Text;
                 new FormHoaDon(tenPhong,giaPhong,nguoiThue,SoDienCu,SoNuocCu,SoDienMoi,SoNuocMoi,giaDien,giaNuoc,tongTienDien,tongTienNuoc,tongTienPhuPhi,tongTien).Show();
+
+                string query = "UPDATE Phong SET SoDienCu = @dien, SoNuocCu = @nuoc WHERE MaPhong = @maPhong";
+                using (SQLiteCommand cmd = new SQLiteCommand(query, CaiDat.CSDL))
+                {
+                    cmd.Parameters.AddWithValue("@dien", tbSoDienMoi);
+                    cmd.Parameters.AddWithValue("@nuoc", tbSoNuocMoi);
+                    cmd.Parameters.AddWithValue("@maPhong", maPhong);
+                    cmd.ExecuteNonQuery();
+                }
+
+                this.Close();
             }
             
         }
@@ -75,9 +90,13 @@ namespace QuanLyPhongTro.Forms
 
         private void FormTinhTien_Load(object sender, EventArgs e)
         {
+            this.Text = string.Format("{0} - {1}", CaiDat.TenPhanMem, "Tính Tiền");
+
+            HienThiDanhSachPhuPhi();
+            LayDanhSachPhuPhi();
+
             TongTienDien();
             TongTienNuoc();
-            DanhSachPhuPhi();
             TongTienPhuPhi();
             TinhTongTien();
         }
@@ -157,7 +176,43 @@ namespace QuanLyPhongTro.Forms
                 MessageBox.Show($"Lỗi: {ex.Message}", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void LayDanhSachPhuPhi()
+        {
+            // Xóa danh sách phụ phí cũ trước khi thêm mới vào ComboBox
+            cmPhuPhi.Items.Clear();
+            try
+            {
+                List<KeyValuePair<Int64, string>> items = new List<KeyValuePair<Int64, string>> { };
 
+                // Truy vấn lấy danh sách tên phụ phí từ bảng PhuPhi
+                string truyVan = "SELECT MaPhuPhi, TenPhuPhi FROM PhuPhi";
+                using (SQLiteCommand cmd = new SQLiteCommand(truyVan, CaiDat.CSDL))
+                {
+                    // Đọc dữ liệu trả về
+                    using (SQLiteDataReader doc = cmd.ExecuteReader())
+                    {
+                        // Duyệt qua các dòng dữ liệu và thêm vào ComboBox
+                        while (doc.Read())
+                        {
+                            // Lấy tên phụ phí từ mỗi dòng
+                            Int64 maPhuPhi = (Int64)doc["MaPhuPhi"];
+                            string tenPhuPhi = doc["TenPhuPhi"].ToString();
+
+                            // Thêm vào ComboBox
+                            items.Add(new KeyValuePair<Int64, string>(maPhuPhi, tenPhuPhi));
+                        }
+                    }
+                }
+
+                cmPhuPhi.DataSource = items;
+                cmPhuPhi.DisplayMember = "Value";
+                cmPhuPhi.ValueMember = "Key";
+            }
+            catch (Exception err)
+            {
+                MaterialMessageBox.Show(err.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private void TinhTongTien()
         {
             try
@@ -177,35 +232,31 @@ namespace QuanLyPhongTro.Forms
                 MessageBox.Show($"Lỗi: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void DanhSachPhuPhi()
+
+        private void HienThiDanhSachPhuPhi()
         {
+            lvPhuPhi.Items.Clear();
             try
             {
-                using (SQLiteCommand truyVan = new SQLiteCommand("SELECT * FROM PhuPhi WHERE Xoa = 0", CaiDat.CSDL))
+                using (SQLiteCommand truyVan = new SQLiteCommand("SELECT pp.MaPhuPhi, pp.TenPhuPhi, pp.GiaPhuPhi FROM PhongVaPhuPhi pvp INNER JOIN PhuPhi pp ON pvp.MaPhuPhi=pp.MaPhuPhi WHERE pvp.MaPhong==@maPhong", CaiDat.CSDL))
                 {
-                    using (SQLiteDataReader reader = truyVan.ExecuteReader())
+                    truyVan.Parameters.AddWithValue("@maPhong", maPhong);
+                    using (SQLiteDataReader doc = truyVan.ExecuteReader())
                     {
-                        cmPhuPhi.Items.Clear();
-                        while (reader.Read())
+                        while (doc.Read())
                         {
-                            string tenPhuPhi = reader["TenPhuPhi"] as string;
-                            if (!string.IsNullOrWhiteSpace(tenPhuPhi))
-                            {
-                                cmPhuPhi.Items.Add(tenPhuPhi);
-                            }
-                        }
-                        if(cmPhuPhi.Items.Count > 0)
-                        {
-                            cmPhuPhi.SelectedIndex = 0;
+                            System.Windows.Forms.ListViewItem item = new System.Windows.Forms.ListViewItem(((Int64)doc["MaPhuPhi"]).ToString());
+                            item.SubItems.Add((string)doc["TenPhuPhi"]);
+                            item.SubItems.Add(((Int64)doc["GiaPhuPhi"]).ToString());
+                            lvPhuPhi.Items.Add(item);
                         }
                     }
                 }
             }
-            catch(Exception ex) 
+            catch (Exception err)
             {
-                MessageBox.Show($"Lỗi: {ex.Message}", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(err.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-           
         }
 
         private void TbSoDienMoi_TextChanged(object sender, EventArgs e)
@@ -231,54 +282,40 @@ namespace QuanLyPhongTro.Forms
             TongTienNuoc();
             TinhTongTien();
         }
-
         private void btThemPhuPhi_Click(object sender, EventArgs e)
         {
             try
             {
-                if (cmPhuPhi.SelectedItem == null) 
+                //Kiểm tra xem có đang chọn phụ phí nào trong ComboBox không?
+                if (cmPhuPhi.SelectedItem == null)
                 {
-                    MessageBox.Show("Chưa Chọn Phụ Phí", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MaterialMessageBox.Show("Vui lòng chọn phụ phí cần thêm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                string TenPhuPhi = cmPhuPhi.SelectedItem.ToString();
-                using (SQLiteCommand TruyVan = new SQLiteCommand("SELECT * FROM PhuPhi WHERE TenPhuPhi = @TenPhuPhi", CaiDat.CSDL))
+
+                string truyVan = "SELECT MaPhuPhi, TenPhuPhi, GiaPhuPhi FROM PhuPhi WHERE MaPhuPhi = @maPhuphi";
+                using (SQLiteCommand lenh = new SQLiteCommand(truyVan, CaiDat.CSDL))
                 {
-                    TruyVan.Parameters.AddWithValue("@TenPhuPhi", TenPhuPhi);
-                    using (SQLiteDataReader reader = TruyVan.ExecuteReader())
+                    lenh.Parameters.AddWithValue("@maPhuphi", cmPhuPhi.SelectedValue);
+                    using (SQLiteDataReader doc = lenh.ExecuteReader())
                     {
-                        while (reader.Read())
+                        while (doc.Read())
                         {
-                            string maPhuPhi = ((Int64)reader["MaPhuPhi"]).ToString();
-                            string tenPhuPhi = (string)reader["TenPhuPhi"].ToString();
-                            string giaPhuPhi = ((Int64)reader["GiaPhuPhi"]).ToString();
-                            System.Windows.Forms.ListViewItem item = new System.Windows.Forms.ListViewItem(maPhuPhi);
-                            item.SubItems.Add(tenPhuPhi);
-                            item.SubItems.Add(giaPhuPhi);
+                            System.Windows.Forms.ListViewItem item = new System.Windows.Forms.ListViewItem(((Int64)doc["MaPhuPhi"]).ToString());
+                            item.SubItems.Add((string)doc["TenPhuPhi"]);
+                            item.SubItems.Add(((Int64)doc["GiaPhuPhi"]).ToString());
 
-
-                            bool itemExists = false;
-                            foreach (System.Windows.Forms.ListViewItem existingItem in lvPhuPhi.Items)
-                            {
-                                if (existingItem.SubItems[0].Text == maPhuPhi) // Kiểm tra mã phụ phí
-                                {
-                                    itemExists = true;
-                                    break;
-                                }
-                            }
-                            if (!itemExists)
+                            Invoke((MethodInvoker)(() =>
                             {
                                 lvPhuPhi.Items.Add(item);
-                            }
-                            TongTienPhuPhi();
-                            TinhTongTien();
+                            }));
                         }
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception err)
             {
-                MessageBox.Show($"Lỗi: {ex.Message}", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(err.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -310,6 +347,16 @@ namespace QuanLyPhongTro.Forms
         {
             if (!(e.KeyChar >= '0' && e.KeyChar <= '9' || e.KeyChar == (char)(8)))
                 e.Handled = true;
+        }
+        protected override void WndProc(ref Message m)
+        {
+            const int WM_SYSCOMMAND = 0x0112;
+            const int SC_SIZE = 0xF000;
+
+            if (m.Msg == WM_SYSCOMMAND && (m.WParam.ToInt32() & 0xFFF0) == SC_SIZE)
+                return;
+
+            base.WndProc(ref m);
         }
     }
 }

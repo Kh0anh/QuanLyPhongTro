@@ -14,11 +14,18 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
 
         private void UserControlCaiDat_Load(object sender, EventArgs e)
         {
+            if (this.DesignMode)
+            {
+                return;
+            }
+
             try
             {
                 // Lấy giá trị từ cơ sở dữ liệu và hiển thị vào TextBox
                 tbGiaDien.Text = CaiDat.GiaDien.ToString();
                 tbGiaNuoc.Text = CaiDat.GiaNuoc.ToString();
+
+                CapNhatDanhSachPhuPhi();
             }
             catch (Exception ex)
             {
