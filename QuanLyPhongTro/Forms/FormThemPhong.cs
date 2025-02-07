@@ -1,10 +1,9 @@
-﻿using System;
+﻿using MaterialSkin.Controls;
+using QuanLyPhongTro.Forms.UserControlFormChinh;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using MaterialSkin.Controls;
-using QuanLyPhongTro.Forms.UserControlFormChinh;
 
 namespace QuanLyPhongTro.Forms
 {
@@ -90,13 +89,13 @@ namespace QuanLyPhongTro.Forms
                     if (long.Parse(item.Text) == idPhong)
                     {
                         item.Selected = true;
-                        item.EnsureVisible(); 
+                        item.EnsureVisible();
                         break;
                     }
                 }
 
                 ClearForm();
-                
+
             }
             catch (Exception err)
             {
@@ -132,7 +131,7 @@ namespace QuanLyPhongTro.Forms
             try
             {
                 //Kiểm tra xem có đang chọn phụ phí nào trong ComboBox không?
-                if (cbPhuPhi.SelectedItem == null )
+                if (cbPhuPhi.SelectedItem == null)
                 {
                     MaterialMessageBox.Show("Vui lòng chọn phụ phí cần thêm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
@@ -173,11 +172,12 @@ namespace QuanLyPhongTro.Forms
                     return;
                 }
 
-                foreach(ListViewItem item in lstPhuPhi.SelectedItems){
+                foreach (ListViewItem item in lstPhuPhi.SelectedItems)
+                {
                     lstPhuPhi.Items.Remove(item);
                 }
 
-           
+
             }
             catch (Exception err)
             {
@@ -195,11 +195,11 @@ namespace QuanLyPhongTro.Forms
                 List<KeyValuePair<Int64, string>> items = new List<KeyValuePair<Int64, string>> { };
 
                 // Truy vấn lấy danh sách tên phụ phí từ bảng PhuPhi
-                string truyVan = "SELECT MaPhuPhi, TenPhuPhi FROM PhuPhi"; 
+                string truyVan = "SELECT MaPhuPhi, TenPhuPhi FROM PhuPhi";
                 using (SQLiteCommand cmd = new SQLiteCommand(truyVan, CaiDat.CSDL))
                 {
                     // Đọc dữ liệu trả về
-                    using (SQLiteDataReader doc = cmd.ExecuteReader()) 
+                    using (SQLiteDataReader doc = cmd.ExecuteReader())
                     {
                         // Duyệt qua các dòng dữ liệu và thêm vào ComboBox
                         while (doc.Read())
@@ -209,7 +209,7 @@ namespace QuanLyPhongTro.Forms
                             string tenPhuPhi = doc["TenPhuPhi"].ToString();
 
                             // Thêm vào ComboBox
-                            items.Add(new KeyValuePair<Int64, string> (maPhuPhi,tenPhuPhi)); 
+                            items.Add(new KeyValuePair<Int64, string>(maPhuPhi, tenPhuPhi));
                         }
                     }
                 }

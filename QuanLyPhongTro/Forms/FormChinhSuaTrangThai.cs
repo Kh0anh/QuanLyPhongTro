@@ -1,7 +1,7 @@
-﻿using System.Data.SQLite;
-using System.Windows.Forms;
+﻿using MaterialSkin.Controls;
 using System;
-using MaterialSkin.Controls;
+using System.Data.SQLite;
+using System.Windows.Forms;
 
 namespace QuanLyPhongTro.Forms
 {
@@ -15,7 +15,7 @@ namespace QuanLyPhongTro.Forms
 
             maPhong = _maPhong;
 
-            LoadTrangThai();          
+            LoadTrangThai();
         }
         private void LoadTrangThai()
         {
@@ -101,7 +101,7 @@ namespace QuanLyPhongTro.Forms
                         cmd.Parameters.AddWithValue("@nguoithue", tbNguoiThue.Text);
                         cmd.Parameters.AddWithValue("@trangthai", 1);
                     }
-                    
+
                     cmd.Parameters.AddWithValue("@maPhong", maPhong); // Đảm bảo rằng bạn có maPhong trong context
 
                     cmd.ExecuteNonQuery();

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data;
-using System.Data.SQLite;
 using System.Windows.Forms;
 
 namespace QuanLyPhongTro.Forms.UserControlFormChinh
@@ -89,7 +87,7 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
             }
         }
 
-       
+
 
         private void btXoaPhuPhi_Click(object sender, EventArgs e)
         {

@@ -1,6 +1,5 @@
 ﻿using MaterialSkin;
 using MaterialSkin.Controls;
-using QuanLyPhongTro.Forms.UserControlFormChinh;
 
 namespace QuanLyPhongTro.Forms
 {

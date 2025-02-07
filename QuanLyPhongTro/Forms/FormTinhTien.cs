@@ -1,9 +1,7 @@
 ﻿using MaterialSkin.Controls;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Data.SQLite;
-using System.Windows.Controls;
 using System.Windows.Forms;
 
 namespace QuanLyPhongTro.Forms
@@ -11,7 +9,7 @@ namespace QuanLyPhongTro.Forms
     public partial class FormTinhTien : MaterialForm
     {
         private string maPhong;
-        public FormTinhTien(string _maPhong,string tenPhong,string giaPhong, string phuPhi, string trangThai,string nguoiThue,string ngayThue, string soDienCu, string soNuocCu, string ghiChu)
+        public FormTinhTien(string _maPhong, string tenPhong, string giaPhong, string phuPhi, string trangThai, string nguoiThue, string ngayThue, string soDienCu, string soNuocCu, string ghiChu)
         {
             InitializeComponent();
             maPhong = _maPhong;
@@ -21,7 +19,7 @@ namespace QuanLyPhongTro.Forms
             tbSoDienCu.Text = soDienCu;
             tbSoNuocCu.Text = soNuocCu;
             tbGiaPhong.Text = giaPhong;
-            
+
             tbGiaDien.Text = CaiDat._GiaDien.ToString("N0");
             tbGiaNuoc.Text = CaiDat._GiaNuoc.ToString("N0");
         }
@@ -63,7 +61,7 @@ namespace QuanLyPhongTro.Forms
                 string tongTienNuoc = tbTongTienNuoc.Text;
                 string tongTienPhuPhi = tbTongTienPhuPhi.Text;
                 string tongTien = tbTongTien.Text;
-                new FormHoaDon(tenPhong,giaPhong,nguoiThue,SoDienCu,SoNuocCu,SoDienMoi,SoNuocMoi,giaDien,giaNuoc,tongTienDien,tongTienNuoc,tongTienPhuPhi,tongTien).Show();
+                new FormHoaDon(tenPhong, giaPhong, nguoiThue, SoDienCu, SoNuocCu, SoDienMoi, SoNuocMoi, giaDien, giaNuoc, tongTienDien, tongTienNuoc, tongTienPhuPhi, tongTien).Show();
 
                 string query = "UPDATE Phong SET SoDienCu = @dien, SoNuocCu = @nuoc WHERE MaPhong = @maPhong";
                 using (SQLiteCommand cmd = new SQLiteCommand(query, CaiDat.CSDL))
@@ -76,7 +74,7 @@ namespace QuanLyPhongTro.Forms
 
                 this.Close();
             }
-            
+
         }
 
         private void tbHuyTinhTien_Click(object sender, EventArgs e)
@@ -100,7 +98,7 @@ namespace QuanLyPhongTro.Forms
             TongTienPhuPhi();
             TinhTongTien();
         }
-        private void TongTienDien() 
+        private void TongTienDien()
         {
             if (float.TryParse(tbSoDienCu.Text, out float dc) &&
                 float.TryParse(tbSoDienMoi.Text, out float dm) &&
@@ -114,7 +112,7 @@ namespace QuanLyPhongTro.Forms
                 else
                 {
                     tbTongTienDien.Text = "0";
-                   // MessageBox.Show("Số điện mới phải lớn hơn hoặc bằng giá điện cũ", "Thông Báo");
+                    // MessageBox.Show("Số điện mới phải lớn hơn hoặc bằng giá điện cũ", "Thông Báo");
                 }
 
             }
@@ -123,8 +121,8 @@ namespace QuanLyPhongTro.Forms
                 tbTongTienDien.Text = "0";
                 //MessageBox.Show("Số điện mới phải lớn hơn hoặc bằng giá điện cũ", "Thông Báo");
             }
-                
-            
+
+
         }
 
         private void TongTienNuoc()
@@ -217,17 +215,18 @@ namespace QuanLyPhongTro.Forms
         {
             try
             {
-                if (double.TryParse(tbTongTienDien.Text, out double tDien) && double.TryParse(tbTongTienNuoc.Text, out double tNuoc) 
-                    && double.TryParse(tbTongTienPhuPhi.Text,out double tPhuPhi) && double.TryParse(tbGiaPhong.Text,out double gPhong)){
+                if (double.TryParse(tbTongTienDien.Text, out double tDien) && double.TryParse(tbTongTienNuoc.Text, out double tNuoc)
+                    && double.TryParse(tbTongTienPhuPhi.Text, out double tPhuPhi) && double.TryParse(tbGiaPhong.Text, out double gPhong))
+                {
                     double tongTien = tDien + tNuoc + tPhuPhi + gPhong;
                     tbTongTien.Text = tongTien.ToString("N0");
                 }
-                else 
-                { 
-                    tbTongTien.Text = "0"; 
+                else
+                {
+                    tbTongTien.Text = "0";
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"Lỗi: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -268,7 +267,7 @@ namespace QuanLyPhongTro.Forms
         private void tbGiaDien_TextChanged(object sender, EventArgs e)
         {
             TongTienDien();
-            TinhTongTien(); 
+            TinhTongTien();
         }
 
         private void tbSoNuocMoi_TextChanged(object sender, EventArgs e)
@@ -325,7 +324,7 @@ namespace QuanLyPhongTro.Forms
             {
                 if (lvPhuPhi.SelectedItems.Count > 0)
                 {
-                    foreach(System.Windows.Forms.ListViewItem selectdeItem in lvPhuPhi.SelectedItems)
+                    foreach (System.Windows.Forms.ListViewItem selectdeItem in lvPhuPhi.SelectedItems)
                     {
                         lvPhuPhi.Items.Remove(selectdeItem);
                     }
