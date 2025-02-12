@@ -56,6 +56,7 @@ namespace QuanLyPhongTro.Forms.UserControlFormChinh
 
                 // Thông báo thành công
                 MessageBox.Show("Cập nhật giá điện và giá nước thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             }
             catch (Exception ex)
             {

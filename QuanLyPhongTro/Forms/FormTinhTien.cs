@@ -285,36 +285,65 @@ namespace QuanLyPhongTro.Forms
         {
             try
             {
-                //Kiểm tra xem có đang chọn phụ phí nào trong ComboBox không?
                 if (cmPhuPhi.SelectedItem == null)
                 {
                     MaterialMessageBox.Show("Vui lòng chọn phụ phí cần thêm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
+                string maPP = cmPhuPhi.SelectedValue?.ToString();
+                if (string.IsNullOrEmpty(maPP))
+                {
+                    MessageBox.Show("Lỗi: Không lấy được mã phụ phí!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Kiểm tra phụ phí đã tồn tại chưa
+                string checkQuery = "SELECT COUNT(*) FROM PhongVaPhuPhi WHERE MaPhong = @MaPhong AND MaPhuPhi = @MaPhuPhi;";
+                using (SQLiteCommand checkCmd = new SQLiteCommand(checkQuery, CaiDat.CSDL))
+                {
+                    checkCmd.Parameters.AddWithValue("@MaPhong", maPhong);
+                    checkCmd.Parameters.AddWithValue("@MaPhuPhi", maPP);
+                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+                    if (count > 0)
+                    {
+                        MessageBox.Show("Phụ phí này đã tồn tại trong phòng!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                }
+
+                // Lấy thông tin phụ phí từ database
                 string truyVan = "SELECT MaPhuPhi, TenPhuPhi, GiaPhuPhi FROM PhuPhi WHERE MaPhuPhi = @maPhuphi";
                 using (SQLiteCommand lenh = new SQLiteCommand(truyVan, CaiDat.CSDL))
                 {
-                    lenh.Parameters.AddWithValue("@maPhuphi", cmPhuPhi.SelectedValue);
+                    lenh.Parameters.AddWithValue("@maPhuphi", maPP);
                     using (SQLiteDataReader doc = lenh.ExecuteReader())
                     {
                         while (doc.Read())
                         {
-                            System.Windows.Forms.ListViewItem item = new System.Windows.Forms.ListViewItem(((Int64)doc["MaPhuPhi"]).ToString());
-                            item.SubItems.Add((string)doc["TenPhuPhi"]);
-                            item.SubItems.Add(((Int64)doc["GiaPhuPhi"]).ToString());
+                            ListViewItem item = new ListViewItem(doc["MaPhuPhi"].ToString());
+                            item.SubItems.Add(doc["TenPhuPhi"].ToString());
+                            item.SubItems.Add(doc["GiaPhuPhi"].ToString());
 
-                            Invoke((MethodInvoker)(() =>
-                            {
-                                lvPhuPhi.Items.Add(item);
-                            }));
+                            lvPhuPhi.Items.Add(item);
                         }
                     }
                 }
+
+                // Thêm phụ phí vào bảng PhongVaPhuPhi
+                string sql = "INSERT INTO PhongVaPhuPhi (MaPhong, MaPhuPhi) VALUES (@MaPhong, @MaPhuPhi);";
+                using (SQLiteCommand cmd = new SQLiteCommand(sql, CaiDat.CSDL))
+                {
+                    cmd.Parameters.AddWithValue("@MaPhong", maPhong);
+                    cmd.Parameters.AddWithValue("@MaPhuPhi", maPP);
+                    cmd.ExecuteNonQuery();
+                }
+                TinhTongTien();
+                TongTienPhuPhi();
             }
             catch (Exception err)
             {
-                MessageBox.Show(err.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Lỗi: {err.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -324,17 +353,24 @@ namespace QuanLyPhongTro.Forms
             {
                 if (lvPhuPhi.SelectedItems.Count > 0)
                 {
-                    foreach (System.Windows.Forms.ListViewItem selectdeItem in lvPhuPhi.SelectedItems)
+                    string maPP = lvPhuPhi.SelectedItems[0].SubItems[0].Text;
+                    string delete = "DELETE FROM PhongVaPhuPhi WHERE MaPhong = @MaPhong AND MaPhuPhi = @MaPhuPhi; ";
+                    using (SQLiteCommand cmd = new SQLiteCommand(delete, CaiDat.CSDL))
                     {
-                        lvPhuPhi.Items.Remove(selectdeItem);
+                        cmd.Parameters.AddWithValue("@MaPhong", maPhong);
+                        cmd.Parameters.AddWithValue("@MaPhuPhi", maPP);
+
+                        cmd.ExecuteNonQuery();
                     }
+                    HienThiDanhSachPhuPhi();
+                    TongTienPhuPhi();
+                    TinhTongTien();
                 }
                 else
                 {
                     MessageBox.Show("Chưa chọn mục để xóa.", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                TongTienPhuPhi();
-                TinhTongTien();
+                
             }
             catch (Exception ex)
             {
